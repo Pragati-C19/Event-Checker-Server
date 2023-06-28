@@ -1,20 +1,12 @@
 const express = require("express");
 const app = express();
-const eventRouter = require("./routes/events");
 const port = 4000;
 
-// app.get("/", (req, res) => {
-//   connection.query("SELECT * FROM event_table", (error, results) => {
-//     if (error) {
-//       console.error("Error executing the query:", error);
-//       return;
-//     }
-//     console.log("Result:", results);
-//     res.json({ results });
-//   });
-// });
+//import all event routers here
+const eventRouter = require("./routes/events");
 
-//router for /events
+
+//routers for http://localhost:4000/events  
 app.use("/events", eventRouter);
 
 app.listen(port, () => {

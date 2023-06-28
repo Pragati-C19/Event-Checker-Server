@@ -9,7 +9,7 @@ const {
   deleteEvents,
 } = require("../controller/event-controller");
 
-//Get All Events
+//Get All Events http://localhost:4000/events/
 router.get("/", getEvents);
 
 //Get One Event
