@@ -1,10 +1,20 @@
+//All request and response for events wrote here
 
-//All functions for api/events wrote here
+//DB Connection
+const connection = require("../database/db-connection");
 
-let { events } = require("../events");
+// let { events } = require("../events");
 
+//Get All Events
 const getEvents = (req, res) => {
-  res.status(200).json({ success: true, data: events });
+  connection.query("SELECT * FROM event_table", (error, results) => {
+    if (error) {
+      console.error("Error executing the query:", error);
+      return;
+    }
+    console.log("Result:", results);
+    res.json({ results });
+  });
 };
 
 const createEvents = (req, res) => {
@@ -33,7 +43,7 @@ const updateEvents = (req, res) => {
   res.status(400).send({ success: false, msg: `No Person with ID  ${id}` });
 };
 
-const deleteevents = (req, res) => {
+const deleteEvents = (req, res) => {
   const person = events.find((person) => person.id === Number(req.params.id));
   const newevents = events.filter(
     (person) => person.id !== Number(req.params.id)
@@ -47,9 +57,8 @@ const deleteevents = (req, res) => {
 };
 
 module.exports = {
-  getevents,
-  createevents,
-  createeventsPostman,
-  updateevents,
-  deleteevents,
+  getEvents,
+  createEvents,
+  updateEvents,
+  deleteEvents,
 };
