@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-//In controller we have write request and response 
+//In controller we have write request and response
 const {
   getEvents,
+  getOneEvent,
   createEvents,
   updateEvents,
   deleteEvents,
@@ -12,8 +13,8 @@ const {
 //Get All Events http://localhost:4000/events/
 router.get("/", getEvents);
 
-//Get One Event
-router.get("/:id", getEvents);
+//Get One Event http://localhost:4000/events/id
+router.get("/:id", getOneEvent);
 
 //Create a new Event
 router.post("/", createEvents);
@@ -24,6 +25,5 @@ router.put("/:id", updateEvents);
 //Delete Event
 router.delete("/:id", deleteEvents);
 
-
-//Export all routers from here 
+//Export all routers from here
 module.exports = router;

@@ -17,6 +17,38 @@ const getEvents = (req, res) => {
   });
 };
 
+//Get specific event by ID
+const getOneEvent = (req, res) => {
+  const eventId = req.params.id;
+
+  connection.query(
+    "SELECT * FROM event_table WHERE event_id = ?",
+    [eventId],
+    (error, results) => {
+      if (error) {
+        console.error("Error executing the query:", error);
+        res
+          .status(500) //500 (Internal Server Error)
+          .json({ error: "Error executing the query" });
+      } else {
+        if (results.length === 0) {
+          //results array is empty meaning no records were returned by the query
+          res.status(404).json({ error: "Event not found" }); //404 (Not Found)
+        } else {
+          // const event = results[0];           //query is designed to retrieve a single event by its ID, this line ensures that only the first record is used.
+          // res.json(event);
+
+          //if we don't want to use [0] then also it's ok nothing change in this code.
+          console.log("Result:", results);
+          res.json(results);
+        }
+        // console.log("Result:", results);
+        // res.json({ results });
+      }
+    }
+  );
+};
+
 const createEvents = (req, res) => {
   const { title } = req.body;
   if (title) {
@@ -58,6 +90,7 @@ const deleteEvents = (req, res) => {
 
 module.exports = {
   getEvents,
+  getOneEvent,
   createEvents,
   updateEvents,
   deleteEvents,
