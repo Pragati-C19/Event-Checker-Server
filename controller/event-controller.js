@@ -7,54 +7,95 @@ const connection = require("../database/db-connection");
 
 //Get All Events
 const getEvents = (req, res) => {
-  connection.query("SELECT * FROM event_table", (error, results) => {
+  //sql query to show full table
+  const getEventsQuery = "SELECT * FROM event_table";
+
+  connection.query(getEventsQuery, (error, results) => {
     if (error) {
       console.error("Error executing the query:", error);
       return;
     }
     console.log("Result:", results);
+
     res.json({ results });
   });
 };
 
 //Get specific event by ID
 const getOneEvent = (req, res) => {
+  //Extract ID from request parameter
   const eventId = req.params.id;
 
-  connection.query(
-    "SELECT * FROM event_table WHERE event_id = ?",
-    [eventId],
-    (error, results) => {
-      if (error) {
-        console.error("Error executing the query:", error);
-        res
-          .status(500) //500 (Internal Server Error)
-          .json({ error: "Error executing the query" });
-      } else {
-        if (results.length === 0) {
-          //results array is empty meaning no records were returned by the query
-          res.status(404).json({ error: "Event not found" }); //404 (Not Found)
-        } else {
-          // const event = results[0];           //query is designed to retrieve a single event by its ID, this line ensures that only the first record is used.
-          // res.json(event);
+  //sql query to find event_id
+  const getOneEventQuery = "SELECT * FROM event_table WHERE event_id = ?";
 
-          //if we don't want to use [0] then also it's ok nothing change in this code.
-          console.log("Result:", results);
-          res.json(results);
-        }
-        // console.log("Result:", results);
-        // res.json({ results });
+  connection.query(getOneEventQuery, [eventId], (error, results) => {
+    if (error) {
+      console.error("Error executing the query:", error);
+      res
+        .status(500) //500 (Internal Server Error)
+        .json({ error: "Error executing the query" });
+    } else {
+      if (results.length === 0) {
+        //results array is empty meaning no records were returned by the query
+        res.status(404).json({ error: "Event not found" }); //404 (Not Found)
+      } else {
+        // const event = results[0];           //query is designed to retrieve a single event by its ID, this line ensures that only the first record is used.
+        // res.json(event);
+
+        //if we don't want to use [0] then also it's ok nothing change in this code.
+        console.log("Result:", results);
+        res.json(results);
       }
+      // console.log("Result:", results);
+      // res.json({ results });
     }
-  );
+  });
 };
 
 const createEvents = (req, res) => {
-  const { title } = req.body;
-  if (title) {
-    return res.status(201).json({ success: true, eventTitle: title });
-  }
-  res.status(400).send({ success: false, msg: "Please Provide Valid Name" });
+
+  //res.json(req.body);
+
+  // Extract data from the request body
+  const {
+    title,
+    description,
+    type_of_event,
+    start_date,
+    end_date,
+    visibility,
+  } = req.body;
+
+  // Get the current timestamp for updated_at and created_at
+  const currentTimestamp = new Date().toISOString();
+
+  // sql query to save the event to the database
+  const createEventQuery =
+    "INSERT INTO events (title, description, type_of_event, start_date, end_date, visibility, updated_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+  // values that should affect respectively
+  const createEventValues = [
+    title,
+    description,
+    type_of_event,
+    start_date,
+    end_date,
+    visibility,
+    currentTimestamp,
+    currentTimestamp,
+  ];
+
+  connection.query(createEventQuery, createEventValues, (error, results) => {
+    if (error) {
+      console.error("Error creating event:", error);
+      res
+        .status(500)
+        .json({ error: "An error occurred while creating the event" });
+    } else {
+      res.status(201).json({ message: "Event created successfully" });
+    }
+  });
 };
 
 const updateEvents = (req, res) => {
