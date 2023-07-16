@@ -53,9 +53,9 @@ const getOneEvent = (req, res) => {
   });
 };
 
+//Create a new Event
 const createEvents = (req, res) => {
-
-  //res.json(req.body);
+  console.log(req.body);
 
   // Extract data from the request body
   const {
@@ -68,11 +68,24 @@ const createEvents = (req, res) => {
   } = req.body;
 
   // Get the current timestamp for updated_at and created_at
-  const currentTimestamp = new Date().toISOString();
+  /*
+        new Date(): This creates a new instance of the Date object, representing the current date and time.
+
+        .toISOString(): The toISOString() method is called on the Date object. It returns a string representation of the date and time in the ISO 8601 format, such as "2023-06-29T07:35:33.943Z".
+
+        .substring(0, 19): The substring() method is used to extract a portion of the ISO 8601 string. In this case, it extracts the characters from index 0 to 18, which represent the date and time portion without the milliseconds. This results in a string like "2023-06-29T07:35:33".
+
+        .replace('T', ' '): The replace() method is used to replace the 'T' character, which separates the date and time, with a space character. This step transforms the string to the format "2023-06-29 07:35:33".  
+  */
+
+  const currentTimestamp = new Date()
+    .toISOString()
+    .substring(0, 19)
+    .replace("T", " ");
 
   // sql query to save the event to the database
   const createEventQuery =
-    "INSERT INTO events (title, description, type_of_event, start_date, end_date, visibility, updated_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO event_table (title, description, type_of_event, start_date, end_date, visibility, updated_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
   // values that should affect respectively
   const createEventValues = [
