@@ -19,7 +19,7 @@ router.get("/:id", getOneEvent);
 //Create a new Event http://localhost:4000/events/
 router.post("/", createEvents);
 
-//Update Event
+//Update Event http://localhost:4000/events/id
 router.put("/:id", updateEvents);
 
 //Delete Event

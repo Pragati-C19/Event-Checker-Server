@@ -85,7 +85,7 @@ const createEvents = (req, res) => {
 
   // sql query to save the event to the database
   const createEventQuery =
-    "INSERT INTO event_table (title, description, type_of_event, start_date, end_date, visibility, updated_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO event_table (title, description, type_of_event, start_date, end_date, visibility, updated_at, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
   // values that should affect respectively
   const createEventValues = [
@@ -94,9 +94,7 @@ const createEvents = (req, res) => {
     type_of_event,
     start_date,
     end_date,
-    visibility,
-    currentTimestamp,
-    currentTimestamp,
+    visibility
   ];
 
   connection.query(createEventQuery, createEventValues, (error, results) => {
@@ -111,22 +109,43 @@ const createEvents = (req, res) => {
   });
 };
 
+//Update a specific event by ID
 const updateEvents = (req, res) => {
-  const { id } = req.params;
-  const { title } = req.body;
-  console.log(id, title);
+  const eventId = req.params.id;
+  // Extract updated data from the request body
+  const {
+    title,
+    description,
+    type_of_event,
+    start_date,
+    end_date,
+    visibility,
+  } = req.body;
 
-  const event = events.find((person) => person.id === Number(id));
-  const newevents = events.map((person) => {
-    if (person.id === Number(id)) {
-      person.name = name;
+  // Perform validation on the data if needed
+
+  // Update the event with the specified ID in the database
+  const query = `UPDATE event_table SET title = ?, description = ?, type_of_event = ?, start_date = ?, end_date = ?, visibility = ?, updated_at = NOW(), created_at = NOW() WHERE event_id = ?`;
+  const values = [
+    title,
+    description,
+    type_of_event,
+    start_date,
+    end_date,
+    visibility,
+    eventId,
+  ];
+
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.error("Error updating event:", error);
+      res
+        .status(500)
+        .json({ error: "An error occurred while updating the event" });
+    } else {
+      res.json({ message: "Event updated successfully" });
     }
-    return person;
   });
-  if (person) {
-    return res.status(201).json({ success: true, data: newevents });
-  }
-  res.status(400).send({ success: false, msg: `No Person with ID  ${id}` });
 };
 
 const deleteEvents = (req, res) => {
