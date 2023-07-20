@@ -94,7 +94,7 @@ const createEvents = (req, res) => {
     type_of_event,
     start_date,
     end_date,
-    visibility
+    visibility,
   ];
 
   connection.query(createEventQuery, createEventValues, (error, results) => {
@@ -149,16 +149,23 @@ const updateEvents = (req, res) => {
 };
 
 const deleteEvents = (req, res) => {
-  const person = events.find((person) => person.id === Number(req.params.id));
-  const newevents = events.filter(
-    (person) => person.id !== Number(req.params.id)
-  );
-  if (person) {
-    return res.status(200).json({ success: true, data: newevents });
-  }
-  res
-    .status(400)
-    .send({ success: false, msg: `No Person with ID  ${req.params.id}` });
+  
+  const eventId = req.params.id;
+
+  // Delete the event with the specified ID from the database
+  const query = "DELETE FROM event_table WHERE event_id = ?";
+  const values = [eventId];
+
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.error("Error deleting event:", error);
+      res
+        .status(500)
+        .json({ error: "An error occurred while deleting the event" });
+    } else {
+      res.json({ message: "Event deleted successfully" });
+    }
+  });
 };
 
 module.exports = {
