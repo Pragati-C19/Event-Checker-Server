@@ -22,7 +22,7 @@ router.post("/", createEvents);
 //Update Event http://localhost:4000/events/id
 router.put("/:id", updateEvents);
 
-//Delete Event
+//Delete Event http://localhost:4000/events/id
 router.delete("/:id", deleteEvents);
 
 //Export all routers from here
