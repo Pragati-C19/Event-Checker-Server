@@ -10,13 +10,13 @@ app.use(bodyParser.json());
 const eventRouter = require("./routes/events");
 
 //import all User routers here
-//const userRouter =require("./routes/users")
+const userRouter = require("./routes/users");
 
 //routers for http://localhost:4000/events
 app.use('/events', eventRouter);
 
 //routers for http://localhost:4000/users
-//app.use("/users", userRouters);
+app.use("/users", userRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
