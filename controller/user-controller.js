@@ -6,11 +6,11 @@ const connection = require("../database/db-connection");
 
 //Create a new User
 const createUsers = (req, res) => {
-    const { userName, emailID } = req.body;
+    const { userID, userName, emailID, profilePic, created_at, updated_at } = req.body;
 
     // Insert user data into the MySQL database
-    const insertQuery = 'INSERT INTO users (userName, emailID) VALUES (?, ?)';
-    db.query(insertQuery, [userName, emailID], (error, results) => {
+    const insertQuery = 'INSERT INTO user_table (userID, userName, emailID, profilePic, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())';
+    connection.query(insertQuery, [userID, userName, emailID, profilePic, created_at, updated_at], (error, results) => {
       if (error) {
         console.error('Error registering user in MySQL:', error);
         res.status(500).json({ error: 'Registration failed' });
