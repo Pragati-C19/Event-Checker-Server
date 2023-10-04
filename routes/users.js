@@ -2,23 +2,13 @@ const express = require("express");
 const router = express.Router();
 
 //In controller we have write request and response
-const {createUsers} = require("../controller/user-controller");
+const {registerUsers, loginUsers} = require("../controller/user-controller");
 
-//Create a new User http://localhost:4000/users/register
-router.post("/register", createUsers);
+//User Registration http://localhost:4000/users/register
+router.post("/register", registerUsers);
 
-
-// //Get All Users 
-// userrouter.get("/", getUsers);
-
-// //Get One User 
-// userrouter.get("/:id", getOneUser);
-
-// //Update User 
-// userrouter.put("/:id", updateUsers);
-
-// //Delete User 
-// userrouter.delete("/:id", deleteUsers);
+//User Login http://localhost:4000/users/login
+router.post("/login", loginUsers);
 
 //Export all userrouters from here
 module.exports = router;
