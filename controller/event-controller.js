@@ -98,6 +98,7 @@ const createEvents = (req, res) => {
   ];
 
   connection.query(createEventQuery, createEventValues, (error, results) => {
+    //res.status(any status code like 200 404 500) this status code are Network status code not internal status code.
     if (error) {
       console.error("Error creating event:", error);
       res
@@ -112,6 +113,7 @@ const createEvents = (req, res) => {
 //Update a specific event by ID
 const updateEvents = (req, res) => {
   const eventId = req.params.id;
+  console.log("[INFO] updateEvents: eventId => ", eventId);
   // Extract updated data from the request body
   const {
     title,
@@ -125,7 +127,7 @@ const updateEvents = (req, res) => {
   // Perform validation on the data if needed
 
   // Update the event with the specified ID in the database
-  const query = `UPDATE event_table SET title = ?, description = ?, type_of_event = ?, start_date = ?, end_date = ?, visibility = ?, updated_at = NOW(), created_at = NOW() WHERE event_id = ?`;
+  const query = `UPDATE event_table SET title = ?, description = ?, type_of_event = ?, start_date = ?, end_date = ?, visibility = ?, updated_at = NOW() WHERE event_id = ?`;
   const values = [
     title,
     description,
@@ -149,7 +151,6 @@ const updateEvents = (req, res) => {
 };
 
 const deleteEvents = (req, res) => {
-  
   const eventId = req.params.id;
 
   // Delete the event with the specified ID from the database
