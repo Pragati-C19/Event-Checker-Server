@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 //In controller we have write request and response
-const {registerUsers, loginUsers} = require("../controller/user-controller");
+const { registerUsers, loginUsers } = require("../controller/user-controller");
 
 //User Registration http://localhost:4000/users/register
 router.post("/register", registerUsers);

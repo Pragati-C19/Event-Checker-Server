@@ -3,8 +3,6 @@
 //DB Connection
 const connection = require("../database/db-connection");
 
-// let { events } = require("../events");
-
 //Get All Events
 const getEvents = (req, res) => {
   //sql query to show full table
@@ -43,12 +41,10 @@ const getOneEvent = (req, res) => {
         // const event = results[0];           //query is designed to retrieve a single event by its ID, this line ensures that only the first record is used.
         // res.json(event);
 
-        //if we don't want to use [0] then also it's ok nothing change in this code.
+        //if we don't want to use [0] then it's ok nothing change in this code.
         console.log("Result:", results);
         res.json(results);
       }
-      // console.log("Result:", results);
-      // res.json({ results });
     }
   });
 };
@@ -127,7 +123,7 @@ const updateEvents = (req, res) => {
   // Perform validation on the data if needed
 
   // Update the event with the specified ID in the database
-  const query = `UPDATE event_table SET title = ?, description = ?, type_of_event = ?, start_date = ?, end_date = ?, visibility = ?, updated_at = NOW() WHERE event_id = ?`;
+  const updateEventsQuery = `UPDATE event_table SET title = ?, description = ?, type_of_event = ?, start_date = ?, end_date = ?, visibility = ?, updated_at = NOW() WHERE event_id = ?`;
   const values = [
     title,
     description,
@@ -138,7 +134,7 @@ const updateEvents = (req, res) => {
     eventId,
   ];
 
-  connection.query(query, values, (error, results) => {
+  connection.query(updateEventsQuery, values, (error, results) => {
     if (error) {
       console.error("Error updating event:", error);
       res
@@ -154,10 +150,10 @@ const deleteEvents = (req, res) => {
   const eventId = req.params.id;
 
   // Delete the event with the specified ID from the database
-  const query = "DELETE FROM event_table WHERE event_id = ?";
+  const deleteEventsQuery = "DELETE FROM event_table WHERE event_id = ?";
   const values = [eventId];
 
-  connection.query(query, values, (error, results) => {
+  connection.query(deleteEventsQuery, values, (error, results) => {
     if (error) {
       console.error("Error deleting event:", error);
       res

@@ -10,20 +10,20 @@ const {
   deleteEvents,
 } = require("../controller/event-controller");
 
-//Get All Events http://localhost:4000/events/
-router.get("/", getEvents);
+//Get All Events http://localhost:4000/events/all
+router.get("/all", getEvents);
 
 //Get One Event http://localhost:4000/events/id
 router.get("/:id", getOneEvent);
 
-//Create a new Event http://localhost:4000/events/
-router.post("/", createEvents);
+//Create a new Event http://localhost:4000/events/create
+router.post("/create", createEvents);
 
-//Update Event http://localhost:4000/events/id
-router.put("/:id", updateEvents);
+//Update Event http://localhost:4000/events/update/id
+router.put("/update/:id", updateEvents);
 
-//Delete Event http://localhost:4000/events/id
-router.delete("/:id", deleteEvents);
+//Delete Event http://localhost:4000/events/delete/id
+router.delete("/delete/:id", deleteEvents);
 
 //Export all routers from here
 module.exports = router;
