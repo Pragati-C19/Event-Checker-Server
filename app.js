@@ -19,5 +19,5 @@ app.use('/events', eventRouter);
 app.use("/users", userRouter);
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Event-Checker app listening on port ${port}`);
 });
