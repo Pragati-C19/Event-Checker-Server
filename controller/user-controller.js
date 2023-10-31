@@ -1,6 +1,7 @@
 //All request and response for User API wrote here
 
 //DB Connection
+const jwt = require("jsonwebtoken");
 const connection = require("../database/db-connection");
 
 //User Registration
@@ -60,7 +61,8 @@ const loginUsers = (req, res) => {
           res.status(200).json({ statusCode: 200, message: "Login successful", user });
           
           //TODO Code for token needs to write here 
-
+          jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
+          
         } else {
           // Passwords do not match : Authentication failed
           res.status(401).json({ statusCode: 401, error: "Authentication failed" });
