@@ -2,7 +2,6 @@
 
 //DB Connection
 const connection = require("../database/db-connection");
-const authenticatedToken = require("../middleware/token-auth");
 
 //Get All Events
 const getEvents = (req, res) => {

@@ -3,7 +3,6 @@
 //DB Connection
 const jwt = require("jsonwebtoken");
 const connection = require("../database/db-connection");
-const authenticatedToken = require("../middleware/token-auth");
 
 //Code is showing 'MODULE_NOT_FOUND' error and didn't give token bcoz we haven't call .env function
 require("dotenv").config();
@@ -60,19 +59,22 @@ const loginUsers = (req, res) => {
       } else {
         // User found, check password
         const user = results[0];
+        console.log(user)
 
         // Compare the provided password with the stored password (plaintext)
         if (password === user.password) {
           // Passwords match, user is authenticated
-
+          user.password = null
+          console.log(user)
+          
           //JWT Token Code
-          const jwtToken = jwt.sign(user, process.env.JWT_SECRET);
+          const jwtToken = jwt.sign(user.userID, process.env.JWT_SECRET);
           res.status(200).json({
             statusCode: 200,
             message: "Login successful",
             accessToken: jwtToken,
           });
-
+          
           //res.status(200).json({ statusCode: 200, message: "Login successful", user });
         } else {
           // Passwords do not match : Authentication failed

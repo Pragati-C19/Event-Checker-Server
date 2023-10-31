@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const authenticatedToken = require("../middleware/token-auth");
+const { authenticateToken } = require("../middleware/token-auth");
 
 //In controller we have write request and response
 const {
@@ -12,10 +12,10 @@ const {
 } = require("../controller/event-controller");
 
 //Get All Events http://localhost:4000/events/all
-router.get("/all",  getEvents);
+router.get("/all", getEvents);
 
 //Get One Event http://localhost:4000/events/id
-router.get("/:id", authenticatedToken.authenticateToken, getOneEvent);
+router.get("/:id", authenticateToken, getOneEvent);
 
 //Create a new Event http://localhost:4000/events/create
 router.post("/create", createEvents);
