@@ -15,7 +15,7 @@ const {
 router.get("/all",  getEvents);
 
 //Get One Event http://localhost:4000/events/id
-router.get("/:id", authenticatedToken.authenticate, getOneEvent);
+router.get("/:id", authenticatedToken.authenticateToken, getOneEvent);
 
 //Create a new Event http://localhost:4000/events/create
 router.post("/create", createEvents);

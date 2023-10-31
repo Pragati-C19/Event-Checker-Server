@@ -1,5 +1,5 @@
 
-function authenticate(req, res, next) {
+function authenticateToken(req, res, next) {
     // Check if the user is authenticated
     if (userIsAuthenticated) {
       next(); // Continue to the next middleware or route handler
@@ -8,4 +8,4 @@ function authenticate(req, res, next) {
     }
 }
 
-module.exports = {authenticate}
+module.exports = {authenticateToken}
