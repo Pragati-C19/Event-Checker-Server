@@ -3,10 +3,10 @@
 //DB Connection
 const jwt = require("jsonwebtoken");
 const connection = require("../database/db-connection");
+const authenticatedToken = require("../middleware/token-auth");
 
-//Code is showing 'MODULE_NOT_FOUND' error and didn't give token bcoz we haven't call .env function 
-require('dotenv').config()
-
+//Code is showing 'MODULE_NOT_FOUND' error and didn't give token bcoz we haven't call .env function
+require("dotenv").config();
 
 //User Registration
 const registerUsers = (req, res) => {
@@ -32,7 +32,9 @@ const registerUsers = (req, res) => {
         //Internal Server Error
         res.status(500).json({ statusCode: 500, error: "Registration failed" });
       } else {
-        res.status(201).json({ statusCode: 201, message: "User registered successfully" });
+        res
+          .status(201)
+          .json({ statusCode: 201, message: "User registered successfully" });
       }
       console.log("[INFO] registerQuery: ", results);
     }
@@ -50,7 +52,7 @@ const loginUsers = (req, res) => {
   connection.query(loginQuery, [emailID], (error, results) => {
     if (error) {
       console.error("Error retrieving user:", error);
-      res.status(500).json({statusCode: 500, error: "Internal server error" });
+      res.status(500).json({ statusCode: 500, error: "Internal server error" });
     } else {
       if (results.length === 0) {
         // User with the provided email not found
@@ -64,14 +66,21 @@ const loginUsers = (req, res) => {
           // Passwords match, user is authenticated
 
           //JWT Token Code
-          const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
-          res.status(200).json({statusCode: 200, message: "Login successful", accessToken : accessToken})
-          
-          //res.status(200).json({ statusCode: 200, message: "Login successful", user });
+          const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+          res
+            .status(200)
+            .json({
+              statusCode: 200,
+              message: "Login successful",
+              accessToken: accessToken,
+            });
 
+          //res.status(200).json({ statusCode: 200, message: "Login successful", user });
         } else {
           // Passwords do not match : Authentication failed
-          res.status(401).json({ statusCode: 401, error: "Authentication failed" });
+          res
+            .status(401)
+            .json({ statusCode: 401, error: "Authentication failed" });
         }
       }
     }
