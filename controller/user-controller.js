@@ -4,6 +4,10 @@
 const jwt = require("jsonwebtoken");
 const connection = require("../database/db-connection");
 
+//Code is showing 'MODULE_NOT_FOUND' error and didn't give token bcoz we haven't call .env function 
+require('dotenv').config()
+
+
 //User Registration
 const registerUsers = (req, res) => {
   const {
@@ -58,11 +62,13 @@ const loginUsers = (req, res) => {
         // Compare the provided password with the stored password (plaintext)
         if (password === user.password) {
           // Passwords match, user is authenticated
-          res.status(200).json({ statusCode: 200, message: "Login successful", user });
+
+          //JWT Token Code
+          const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
+          res.status(200).json({statusCode: 200, message: "Login successful", accessToken : accessToken})
           
-          //TODO Code for token needs to write here 
-          jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
-          
+          //res.status(200).json({ statusCode: 200, message: "Login successful", user });
+
         } else {
           // Passwords do not match : Authentication failed
           res.status(401).json({ statusCode: 401, error: "Authentication failed" });
