@@ -66,14 +66,12 @@ const loginUsers = (req, res) => {
           // Passwords match, user is authenticated
 
           //JWT Token Code
-          const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-          res
-            .status(200)
-            .json({
-              statusCode: 200,
-              message: "Login successful",
-              accessToken: accessToken,
-            });
+          const jwtToken = jwt.sign(user, process.env.JWT_SECRET);
+          res.status(200).json({
+            statusCode: 200,
+            message: "Login successful",
+            accessToken: jwtToken,
+          });
 
           //res.status(200).json({ statusCode: 200, message: "Login successful", user });
         } else {
