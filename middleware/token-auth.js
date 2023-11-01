@@ -11,9 +11,10 @@ function authenticateToken(req, res, next) {
     res.status(401).send("Unauthorized");
   } else {
     //if we have a token we need to verify that token 
-    jwt.verify(token, process.env.JWT_SECRET, (err, userID) => {
+    //this user_id is used in mysql table 
+    jwt.verify(token, process.env.JWT_SECRET, (err, user_id) => {
         if(err) return res.status(403).send("You Don't have access")
-        req.userID=userID;
+        req.user_id=user_id;
         next(); // Continue to the next middleware or route handler
     });
   }

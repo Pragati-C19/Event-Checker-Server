@@ -16,15 +16,14 @@ const registerUsers = (req, res) => {
     password,
     profilePic,
     created_at,
-    updated_at,
   } = req.body;
 
   // Insert user data into the MySQL database
   const registerQuery =
-    "INSERT INTO user_table (userID, userName, emailID, password, profilePic, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW())";
+    "INSERT INTO user_table (user_id, username, email_id, password, profile_pic, created_at) VALUES (?, ?, ?, ?, ?, NOW())";
   connection.query(
     registerQuery,
-    [userID, userName, emailID, password, profilePic, created_at, updated_at],
+    [userID, userName, emailID, password, profilePic, created_at],
     (error, results) => {
       if (error) {
         console.error("Error registering user in MySQL:", error);
@@ -43,10 +42,10 @@ const registerUsers = (req, res) => {
 //User Login
 const loginUsers = (req, res) => {
   const { emailID, password } = req.body;
-  console.log("[INFO] loginUser: emailID and Password => ", emailID, password);
+  console.log("[INFO] loginUser: email_id and Password => ", emailID, password);
 
   // Retrieve user data from the database based on the provided email
-  const loginQuery = "SELECT * FROM user_table WHERE emailID = ?";
+  const loginQuery = "SELECT * FROM user_table WHERE email_id = ?";
 
   connection.query(loginQuery, [emailID], (error, results) => {
     if (error) {
@@ -66,9 +65,9 @@ const loginUsers = (req, res) => {
           // Passwords match, user is authenticated
           user.password = null
           console.log(user)
-          
+
           //JWT Token Code
-          const jwtToken = jwt.sign(user.userID, process.env.JWT_SECRET);
+          const jwtToken = jwt.sign(user.user_id, process.env.JWT_SECRET);
           res.status(200).json({
             statusCode: 200,
             message: "Login successful",
