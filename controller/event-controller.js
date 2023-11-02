@@ -6,9 +6,12 @@ const connection = require("../database/db-connection");
 //Get All Events
 const getEvents = (req, res) => {
   //sql query to show full table
-  const getEventsQuery = "SELECT * FROM event_table";
+  const userID = 8;
+  console.log(userID)
 
-  connection.query(getEventsQuery, (error, results) => {
+  const getEventsQuery = "SELECT * FROM event_table WHERE visibility = 'PUBLIC' OR (visibility = 'PRIVATE' AND user_id = ?)";
+
+  connection.query(getEventsQuery, userID, (error, results) => {
     if (error) {
       console.error("Error executing the query:", error);
       return;
