@@ -141,17 +141,20 @@ const updateEvents = (req, res) => {
         .status(500)
         .json({ error: "An error occurred while updating the event" });
     } else {
-      res.json({ message: "Event updated successfully" });
+      res.status(201).json({ message: "Event updated successfully" });
     }
   });
 };
 
 const deleteEvents = (req, res) => {
   const eventId = req.params.id;
-
+  const userID = 7;
+  //const userID = req.user_id;
+  console.log("[INFO] deleteEvents: userId => ", userID);
+  
   // Delete the event with the specified ID from the database
-  const deleteEventsQuery = "DELETE FROM event_table WHERE event_id = ?";
-  const values = [eventId];
+  const deleteEventsQuery = "DELETE FROM event_table WHERE event_id = ? AND user_id = ?";
+  const values = [eventId, userID];
 
   connection.query(deleteEventsQuery, values, (error, results) => {
     if (error) {
@@ -160,7 +163,7 @@ const deleteEvents = (req, res) => {
         .status(500)
         .json({ error: "An error occurred while deleting the event" });
     } else {
-      res.json({ message: "Event deleted successfully" });
+      res.status(201).json({ message: "Event deleted successfully" });
     }
   });
 };
