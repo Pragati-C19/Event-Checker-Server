@@ -7,9 +7,11 @@ const connection = require("../database/db-connection");
 const getEvents = (req, res) => {
   //sql query to show full table
   const userID = req.user_id;
-  console.log("getEvents",{userID})
+  //TODO Add console logs like this for userID and EventID
+  console.log("getEvents", { userID });
 
-  const getEventsQuery = "SELECT * FROM event_table WHERE visibility = 'PUBLIC' OR (visibility = 'PRIVATE' AND user_id = ?)";
+  const getEventsQuery =
+    "SELECT * FROM event_table WHERE visibility = 'PUBLIC' OR (visibility = 'PRIVATE' AND user_id = ?)";
 
   connection.query(getEventsQuery, userID, (error, results) => {
     if (error) {
@@ -152,20 +154,21 @@ const updateEvents = (req, res) => {
 const deleteEvents = (req, res) => {
   const eventId = req.params.id;
   const userID = req.user_id;
-  console.log("deleteEvents",{eventId, userID})
-  
+  console.log("deleteEvents", { eventId, userID });
+
   // Delete the event with the specified ID from the database
-  const deleteEventsQuery = "DELETE FROM event_table WHERE event_id = ? AND user_id = ?";
+  const deleteEventsQuery =
+    "DELETE FROM event_table WHERE event_id = ? AND user_id = ?";
   const values = [eventId, userID];
 
-  connection.query(deleteEventsQuery, values, (error, results) => {
+  connection.query(deleteEventsQuery, values, (error) => {
     if (error) {
-      console.error("Error deleting event:", error);
-      res
-        .status(500)
-        .json({ error: "An error occurred while deleting the event" });
+      console.error("Error executing the query:", error);
+      return;
     } else {
-      res.status(201).json({ message: "Event deleted successfully" });
+      res
+        .status(200)
+        .json({ statusCode: 201, statusMsg: "Event deleted successfully" });
     }
   });
 };
