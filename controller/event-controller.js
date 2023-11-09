@@ -6,8 +6,8 @@ const connection = require("../database/db-connection");
 //Get All Events
 const getEvents = (req, res) => {
   //sql query to show full table
-  const userID = 8;
-  console.log(userID)
+  const userID = req.user_id;
+  console.log("getEvents",{userID})
 
   const getEventsQuery = "SELECT * FROM event_table WHERE visibility = 'PUBLIC' OR (visibility = 'PRIVATE' AND user_id = ?)";
 
@@ -151,9 +151,8 @@ const updateEvents = (req, res) => {
 
 const deleteEvents = (req, res) => {
   const eventId = req.params.id;
-  const userID = 7;
-  //const userID = req.user_id;
-  console.log("[INFO] deleteEvents: userId => ", userID);
+  const userID = req.user_id;
+  console.log("deleteEvents",{eventId, userID})
   
   // Delete the event with the specified ID from the database
   const deleteEventsQuery = "DELETE FROM event_table WHERE event_id = ? AND user_id = ?";
