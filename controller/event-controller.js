@@ -113,7 +113,9 @@ const createEvents = (req, res) => {
 //Update a specific event by ID
 const updateEvents = (req, res) => {
   const eventId = req.params.id;
-  console.log("[INFO] updateEvents: eventId => ", eventId);
+  const userID = req.user_id;
+  console.log("updateEvents", { eventId, userID });
+
   // Extract updated data from the request body
   const {
     title,
@@ -127,7 +129,7 @@ const updateEvents = (req, res) => {
   // Perform validation on the data if needed
 
   // Update the event with the specified ID in the database
-  const updateEventsQuery = `UPDATE event_table SET title = ?, description = ?, type_of_event = ?, start_date = ?, end_date = ?, visibility = ?, updated_at = NOW() WHERE event_id = ?`;
+  const updateEventsQuery = `UPDATE event_table SET title = ?, description = ?, type_of_event = ?, start_date = ?, end_date = ?, visibility = ?, updated_at = NOW() WHERE event_id = ? AND user_id = ?`;
   const values = [
     title,
     description,
@@ -136,16 +138,16 @@ const updateEvents = (req, res) => {
     end_date,
     visibility,
     eventId,
+    userID,
   ];
 
   connection.query(updateEventsQuery, values, (error, results) => {
     if (error) {
-      console.error("Error updating event:", error);
-      res
-        .status(500)
-        .json({ error: "An error occurred while updating the event" });
+      console.error("Error while executing the query:", error);
     } else {
-      res.status(201).json({ message: "Event updated successfully" });
+      res
+        .status(200)
+        .json({ statusCode: 201, statusMsg: "Event updated successfully" });
     }
   });
 };
