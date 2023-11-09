@@ -5,11 +5,11 @@ const connection = require("../database/db-connection");
 
 //Get All Events
 const getEvents = (req, res) => {
-  //sql query to show full table
   const userID = req.user_id;
   //TODO Add console logs like this for userID and EventID
   console.log("getEvents", { userID });
 
+  //sql query to show full table
   const getEventsQuery =
     "SELECT * FROM event_table WHERE visibility = 'PUBLIC' OR (visibility = 'PRIVATE' AND user_id = ?)";
 
@@ -19,7 +19,6 @@ const getEvents = (req, res) => {
       return;
     }
     console.log("Result:", results);
-
     res.json({ results });
   });
 };
