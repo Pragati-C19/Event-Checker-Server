@@ -28,11 +28,11 @@ const getOneEvent = (req, res) => {
   //Extract ID from request parameter
   const eventId = req.params.id;
   const userID = req.user_id;
-  console.log("getOneEvent", { eventId, userID });
+  console.log("getOneEVENTuPDATE", { eventId, userID });
 
   //sql query to find event_id
   const getOneEventQuery =
-    "SELECT * FROM event_table WHERE event_id = ? AND user_id=?";
+    "SELECT * FROM event_table WHERE event_id = ?";
 
   const values = [eventId, userID];
 
@@ -42,16 +42,17 @@ const getOneEvent = (req, res) => {
     } else {
       if (results.length === 0) {
         //results array is empty meaning no records were returned by the query
+        console.log("getOneEvent 404 error statement", { eventId, userID, results });
         res.status(200).json({ statusCode: 404, statusMsg: "Event not Found" });
       } else {
-        //const event = results[0]; //query is designed to retrieve a single event by its ID, this line ensures that only the first record is used.
+        const event = results[0]; //query is designed to retrieve a single event by its ID, this line ensures that only the first record is used.
         console.log(event);
         //TODO For debugging
         console.log("Event Visibility1:", event.visibility);
         console.log("Event User ID1:", event.user_id);
         console.log("Authenticated User ID1:", userID);
         // Check the visibility and user_id for further logic
-        if (results.visibility === "PUBLIC") {
+        if (event.visibility === "PUBLIC") {
           // Handle logic for public events
           console.log("getOneEvent if statement", { eventId, userID });
           //TODO For debugging
@@ -59,18 +60,15 @@ const getOneEvent = (req, res) => {
           console.log("Event User ID2:", event.user_id);
           console.log("Authenticated User ID2:", userID);
 
-          res.json(results);
-        } else if (
-          results.visibility === "PRIVATE" &&
-          results.user_id === userID
-        ) {
+          res.json(event);
+        } else if (event.visibility === "PRIVATE" && event.user_id == userID) {
           // Handle logic for private events for the authenticated user
           console.log("getOneEvent if-else statement", { eventId, userID });
           //TODO For debugging
-          console.log("Event Visibility3:", results.visibility);
-          console.log("Event User ID3:", results.user_id);
+          console.log("Event Visibility3:", event.visibility);
+          console.log("Event User ID3:", event.user_id);
           console.log("Authenticated User ID3:", userID);
-          res.json(results);
+          res.json(event);
         } else {
           // User does not have permission for the event
           res.status(200).json({
